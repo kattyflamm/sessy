@@ -1,0 +1,312 @@
+<!DOCTYPE html> <!--Код писал Сейткул Берик-->
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профильные предметы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .main-menu {
+            text-align: center;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .menu-buttons button {
+            padding: 12px;
+            font-size: 18px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            color: #333;
+            background-color: #f8f9fa;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .result-message {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .question-item {
+            background-color: #f1f8ff; 
+            border-left: 5px solid #007bff; 
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-item {
+            background-color: #dff0d8; 
+            border-left: 5px solid #28a745; 
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da; 
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Стили для кода */
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            margin-top: 15px;
+        }
+
+        code {
+            font-family: monospace;
+            font-size: 16px;
+        }
+
+        
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .menu-buttons button {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            .back-btn {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .options-container {
+                gap: 10px;
+            }
+
+            .option-btn {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .result-message {
+                font-size: 14px;
+            }
+
+            .search-section input,
+            .search-section select {
+                font-size: 30px;
+                padding: 12px;
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                width: 100%;
+                padding: 8px;
+            }
+
+            .menu-buttons button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .back-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .options-container {
+                gap: 8px;
+            }
+
+            .option-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .result-message {
+                font-size: 12px;
+            }
+
+            .search-section input,
+            .search-section select {
+                font-size: 30px;
+                padding: 10px;
+                width: 100%;
+            }
+        }
+
+
+        .search-section {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            padding: 10px 0;
+            z-index: 10; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-section input,
+        .search-section select {
+            font-size: 30px;
+            padding: 12px;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .search-section select {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="mainMenu" class="main-menu">
+            <div class="menu-buttons">
+                <button onclick="window.location.href='index.html'">Назад</button>
+            </div>
+        </div>
+        <div id="profilSection" class="section">
+            <h2>Профильные предметы</h2>
+            <div class="filter-container">
+                <div class="search-section">
+                    <input type="text" id="searchInput" placeholder="Поиск по вопросам..." oninput="updateResults()">
+                    <select id="subjectFilter" onchange="updateResults()">
+                        <option value="all">_Все предметы_</option>
+                        <option value="programmingTechnology">Техналогия програмирования</option>
+                        <option value="discreteMathematics">Дискретная математика</option>
+                        <option value="computerArchitecture">Архитектура компьютерных систем</option>
+                    </select>
+                </div>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+        </div>
+    </div>
+    <script src="frontend/questions/programmingTechnology.js"></script>
+    <script src="frontend/questions/discreteMathematics.js"></script>
+    <script src="frontend/questions/computerArchitecture.js"></script>
+
+    <script>
+        const subjects = {
+            programmingTechnology: programmingTechnologyQuestions,
+            discreteMathematics: discreteMathematicsQuestions,
+            computerArchitecture: computerArchitectureQuestions
+        };
+
+        function updateResults() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const subject = document.getElementById('subjectFilter').value;
+
+            let filteredQuestions = subject === 'all' ? 
+                [...programmingTechnologyQuestions, ...discreteMathematicsQuestions, ...computerArchitectureQuestions] : 
+                subjects[subject];
+
+            filteredQuestions = filteredQuestions.filter(q => 
+                q.title.toLowerCase().includes(searchText) || 
+                q.content.toLowerCase().includes(searchText)
+            );
+
+            displayResults(filteredQuestions);
+        }
+
+        function displayResults(questions) {
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (questions.length === 0) {
+                resultsContainer.innerHTML = '<p class="no-results">Вопросы не найдены</p>';
+                return;
+            }
+
+            resultsContainer.innerHTML = questions.map(q => `
+                <div class="question-item">
+                    <h3 class="question-title">${q.title}</h3>
+                    <p class="question-content">${q.content}</p>
+                    ${q.code ? `<pre><code>${q.code}</code></pre>` : ''}
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateResults();
+        });
+    </script>
+</body>
+</html>
